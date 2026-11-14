@@ -401,7 +401,28 @@ if (typeof document !== "undefined"){
       grossHint = $("gross-hint"), hoursRow = $("hours-row"), hoursInput = $("hours"),
       stateSel = $("state"), nycRow = $("nyc-row");
 
+  var lastPayType = payType.value; /* tracks pay type for amount conversion */
   function syncPayType(){
+    if (payType.value !== lastPayType){
+      /* Convert the amount when switching pay type, so the user never
+         silently calculates with a carried-over value (e.g. $60,000
+         salary becoming a $60,000/hour rate). Conversion uses the
+         hours-per-week field: salary = rate x hours x 52. */
+      var cur = parseFloat(grossInput.value);
+      var hrs = parseFloat(hoursInput.value) || 40;
+      if (payType.value === "hourly"){
+        var rate = (isFinite(cur) && cur > 0) ? cur / (hrs * 52) : 25;
+        if (rate < 1) rate = 25; /* nonsense carry-over: use a sensible default */
+        grossInput.value = Math.round(rate * 100) / 100;
+      } else {
+        var salary;
+        if (!isFinite(cur) || cur <= 0) salary = 60000;
+        else if (cur > 1000) salary = cur; /* carried-over salary, keep it */
+        else salary = cur * hrs * 52;
+        grossInput.value = Math.round(salary);
+      }
+      lastPayType = payType.value;
+    }
     if (payType.value === "hourly"){
       grossLabel.textContent = "Hourly rate ($ per hour)";
       grossHint.textContent = "Your pay per hour, before any tax or deduction.";
