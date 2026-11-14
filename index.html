@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paycheck Calculator 2026 — Take-Home Pay Calculator (Free, No Signup)</title>
+<meta name="description" content="Free 2026 paycheck calculator. See your take-home pay after federal tax, Social Security, Medicare and state tax for California, Texas, Washington, New York and New Mexico. No signup, no tracking — your salary never leaves your browser.">
+<style>
+  *{box-sizing:border-box}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;margin:0;color:#1a1a2e;background:#f4f6fb;line-height:1.6}
+  header{background:#14264d;color:#fff;padding:28px 16px;text-align:center}
+  header h1{margin:0 0 6px;font-size:1.7rem;line-height:1.25}
+  header p{margin:0;opacity:.9;max-width:640px;margin-left:auto;margin-right:auto}
+  main{max-width:860px;margin:0 auto;padding:16px}
+  .card{background:#fff;border:1px solid #dfe3ee;border-radius:12px;padding:20px;margin:16px 0;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+  h2{color:#14264d;margin-top:0;font-size:1.3rem}
+  h3{color:#14264d;font-size:1.05rem;margin-bottom:6px}
+  label{display:block;font-weight:600;margin:14px 0 4px}
+  input[type=number],select{width:100%;padding:10px;border:1px solid #b9c0d4;border-radius:8px;font-size:1rem;background:#fff}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+  @media (max-width:560px){.row{grid-template-columns:1fr}}
+  .radio-row{display:flex;gap:16px;flex-wrap:wrap}
+  .radio-row label{font-weight:400;margin:0;display:flex;gap:6px;align-items:center}
+  button{background:#14264d;color:#fff;border:0;border-radius:8px;padding:12px 22px;font-size:1.05rem;cursor:pointer;margin-top:18px;width:100%}
+  button:hover{background:#1e3a75}
+  .hint{font-size:.85rem;color:#555;margin-top:4px}
+  .note{background:#fff8e1;border:1px solid #f0d98c;border-radius:8px;padding:12px 14px;margin:12px 0;font-size:.95rem}
+  .result-big{background:#14264d;color:#fff;border-radius:12px;padding:20px;text-align:center;margin:16px 0}
+  .result-big .amt{font-size:2.2rem;font-weight:800}
+  .result-big .lbl{opacity:.85}
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:.98rem}
+  th,td{padding:8px 6px;border-bottom:1px solid #e3e6f0;text-align:right}
+  th:first-child,td:first-child{text-align:left}
+  th{background:#f0f2f8;color:#14264d}
+  tr.total td{font-weight:700;border-top:2px solid #14264d}
+  tr.net td{font-weight:800;font-size:1.05rem;color:#14264d}
+  .pill{display:inline-block;background:#e8f5e9;color:#1b5e20;border-radius:999px;padding:2px 10px;font-size:.8rem;font-weight:600}
+  footer{color:#555;font-size:.88rem;text-align:center;padding:24px 16px}
+  a{color:#1e3a75}
+  ul{padding-left:20px}
+  .muted{color:#555;font-size:.92rem}
+</style>
+</head>
+<body>
+<header>
+  <h1>Paycheck Calculator 2026</h1>
+  <p>Free take-home pay calculator — federal tax, Social Security, Medicare and state tax for 2026. No signup, no ads, no tracking. Your salary never leaves your browser: every calculation runs on your device.</p>
+</header>
+<main>
+
+<section class="card" aria-label="Paycheck calculator">
+  <h2>Calculate your take-home pay</h2>
+  <form id="calc-form">
+    <div class="row">
+      <div>
+        <label for="pay-type">I am paid by</label>
+        <select id="pay-type">
+          <option value="salary">Annual salary</option>
+          <option value="hourly">Hourly rate</option>
+        </select>
+      </div>
+      <div>
+        <label for="gross-input" id="gross-label">Gross annual salary ($)</label>
+        <input type="number" id="gross-input" min="0" step="any" value="60000" required>
+        <div class="hint" id="gross-hint">Your pay before any tax or deduction.</div>
+      </div>
+    </div>
+    <div class="row" id="hours-row" style="display:none">
+      <div>
+        <label for="hours">Hours worked per week</label>
+        <input type="number" id="hours" min="1" max="168" step="any" value="40">
+      </div>
+      <div></div>
+    </div>
+    <div class="row">
+      <div>
+        <label for="frequency">Pay frequency</label>
+        <select id="frequency">
+          <option value="52">Weekly (52 paychecks)</option>
+          <option value="26" selected>Biweekly — every 2 weeks (26 paychecks)</option>
+          <option value="24">Semimonthly — twice a month (24 paychecks)</option>
+          <option value="12">Monthly (12 paychecks)</option>
+          <option value="1">Annual (1 paycheck)</option>
+        </select>
+      </div>
+      <div>
+        <label for="filing">Filing status</label>
+        <select id="filing">
+          <option value="single" selected>Single</option>
+          <option value="mfj">Married filing jointly</option>
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <div>
+        <label for="state">State</label>
+        <select id="state">
+          <option value="CA">California</option>
+          <option value="TX">Texas</option>
+          <option value="WA">Washington</option>
+          <option value="NY">New York</option>
+          <option value="NM">New Mexico</option>
+          <option value="AL">Alabama</option>
+          <option value="AK">Alaska</option>
+          <option value="AZ">Arizona</option>
+          <option value="AR">Arkansas</option>
+          <option value="CO">Colorado</option>
+          <option value="CT">Connecticut</option>
+          <option value="DE">Delaware</option>
+          <option value="DC">District of Columbia</option>
+          <option value="FL">Florida</option>
+          <option value="GA">Georgia</option>
+          <option value="HI">Hawaii</option>
+          <option value="ID">Idaho</option>
+          <option value="IL">Illinois</option>
+          <option value="IN">Indiana</option>
+          <option value="IA">Iowa</option>
+          <option value="KS">Kansas</option>
+          <option value="KY">Kentucky</option>
+          <option value="LA">Louisiana</option>
+          <option value="ME">Maine</option>
+          <option value="MD">Maryland</option>
+          <option value="MA">Massachusetts</option>
+          <option value="MI">Michigan</option>
+          <option value="MN">Minnesota</option>
+          <option value="MS">Mississippi</option>
+          <option value="MO">Missouri</option>
+          <option value="MT">Montana</option>
+          <option value="NE">Nebraska</option>
+          <option value="NV">Nevada</option>
+          <option value="NH">New Hampshire</option>
+          <option value="NJ">New Jersey</option>
+          <option value="NC">North Carolina</option>
+          <option value="ND">North Dakota</option>
+          <option value="OH">Ohio</option>
+          <option value="OK">Oklahoma</option>
+          <option value="OR">Oregon</option>
+          <option value="PA">Pennsylvania</option>
+          <option value="RI">Rhode Island</option>
+          <option value="SC">South Carolina</option>
+          <option value="SD">South Dakota</option>
+          <option value="TN">Tennessee</option>
+          <option value="UT">Utah</option>
+          <option value="VT">Vermont</option>
+          <option value="VA">Virginia</option>
+          <option value="WV">West Virginia</option>
+          <option value="WI">Wisconsin</option>
+          <option value="WY">Wyoming</option>
+        </select>
+        <div class="hint">State tax is modelled for CA, TX, WA, NY and NM. Other states show a federal-only estimate for now.</div>
+      </div>
+      <div id="nyc-row" style="display:none">
+        <label>New York City resident?</label>
+        <div class="radio-row">
+          <label><input type="radio" name="nyc" value="no" checked> No — NY State only</label>
+          <label><input type="radio" name="nyc" value="yes"> Yes — add NYC city tax</label>
+        </div>
+        <div class="hint">NYC residents pay a city income tax (3.078%–3.876%) on top of NY State tax.</div>
+      </div>
+    </div>
+    <div class="row">
+      <div>
+        <label for="k401">401(k) contribution (% of gross pay)</label>
+        <input type="number" id="k401" min="0" max="100" step="any" value="0">
+        <div class="hint">2026 limit: $24,500. Lowers federal and state taxable income, but not Social Security/Medicare wages.</div>
+      </div>
+      <div>
+        <label for="other-pretax">Other pre-tax deductions ($ per year)</label>
+        <input type="number" id="other-pretax" min="0" step="any" value="0">
+        <div class="hint">Health insurance premiums, HSA, FSA. Lowers federal and state taxable income.</div>
+      </div>
+    </div>
+    <button type="submit">Calculate my take-home pay</button>
+  </form>
+
+  <div id="results" style="display:none">
+    <div class="result-big">
+      <div class="lbl">Your take-home pay per paycheck</div>
+      <div class="amt" id="net-per-pay">$0.00</div>
+      <div class="lbl"><span id="net-per-year">$0</span> per year &middot; effective tax rate <span id="eff-rate">0%</span></div>
+    </div>
+    <div id="state-note"></div>
+    <h3>Breakdown</h3>
+    <table id="breakdown">
+      <thead><tr><th>Item</th><th>Per paycheck</th><th>Per year</th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <p class="muted">This calculator models your <strong>annual tax liability spread evenly across your paychecks</strong>. Your employer's per-paycheck withholding (IRS Publication 15-T tables) can differ slightly — see the IRS Tax Withholding Estimator to check your W-4.</p>
+  </div>
+</section>
+
+<section class="card">
+  <h2>How take-home pay works</h2>
+  <p>Your gross pay is not what lands in your bank account. Before you are paid, several amounts come off it:</p>
+  <ul>
+    <li><strong>Federal income tax</strong> — 2026 has seven marginal rates (10% to 37%). Only the income inside each bracket is taxed at that bracket's rate. The 2026 standard deduction ($16,100 single / $32,200 married filing jointly) comes off first, so a single filer on $60,000 is taxed on $43,900, not $60,000.</li>
+    <li><strong>Social Security (6.2%)</strong> — charged on wages up to the 2026 wage base of $184,500. Above that, no more Social Security tax for the year.</li>
+    <li><strong>Medicare (1.45%)</strong> — charged on all wages, with no cap. High earners pay an extra 0.9% on wages over $200,000 (single) or $250,000 (married filing jointly).</li>
+    <li><strong>State income tax</strong> — ranges from 0% (Texas, Washington and seven other states levy no tax on wages) to California's 13.3% top rate. Some states also charge payroll levies, such as California SDI (1.3%) and Washington's PFML and WA Cares — most generic calculators leave these out, so their state numbers are wrong.</li>
+    <li><strong>Pre-tax deductions</strong> — a traditional 401(k) lowers your federal and state taxable income (but not your Social Security/Medicare wages). Roth 401(k) contributions lower neither.</li>
+  </ul>
+  <p>Because the rates are marginal, a pay rise never makes you poorer: only the dollars above each threshold are taxed at the higher rate.</p>
+</section>
+
+<section class="card">
+  <h2>Worked example: $60,000 salary, single, paid biweekly (26 paychecks)</h2>
+  <p>Same salary, very different take-home pay depending on the state. No 401(k) or other deductions.</p>
+  <table>
+    <thead><tr><th>State</th><th>Gross / paycheck</th><th>Federal tax</th><th>Social Sec. + Medicare</th><th>State tax &amp; levies</th><th>Take-home / paycheck</th><th>Take-home / year</th></tr></thead>
+    <tbody>
+      <tr><td>California</td><td>$2,307.69</td><td>$193.08</td><td>$176.54</td><td>$96.58 (CA tax $66.58 + SDI $30.00)</td><td><strong>$1,841.50</strong></td><td><strong>$47,878.92</strong></td></tr>
+      <tr><td>Texas</td><td>$2,307.69</td><td>$193.08</td><td>$176.54</td><td>$0.00 (no state income tax)</td><td><strong>$1,938.08</strong></td><td><strong>$50,390.00</strong></td></tr>
+      <tr><td>Washington</td><td>$2,307.69</td><td>$193.08</td><td>$176.54</td><td>$32.01 (PFML $18.63 + WA Cares $13.38)</td><td><strong>$1,906.07</strong></td><td><strong>$49,557.70</strong></td></tr>
+      <tr><td>New York (state only)</td><td>$2,307.69</td><td>$193.08</td><td>$176.54</td><td>$101.65 (NY tax)</td><td><strong>$1,836.42</strong></td><td><strong>$47,747.00</strong></td></tr>
+      <tr><td>New York City resident</td><td>$2,307.69</td><td>$193.08</td><td>$176.54</td><td>$174.37 (NY tax $101.65 + NYC tax $72.72)</td><td><strong>$1,763.70</strong></td><td><strong>$45,856.31</strong></td></tr>
+      <tr><td>New Mexico</td><td>$2,307.69</td><td>$193.08</td><td>$176.54</td><td>$63.63 (NM tax)</td><td><strong>$1,874.45</strong></td><td><strong>$48,735.70</strong></td></tr>
+    </tbody>
+  </table>
+  <p class="muted">California check: a published 2026 example for this exact case (TeamPredict, using EDD Method B withholding) gives $1,838.65 per paycheck — within $3 of our $1,841.50. The small gap is withholding vs annual liability, explained above.</p>
+</section>
+
+<section class="card">
+  <h2>2026 figures used — with sources</h2>
+  <p class="muted">Figures last checked: <strong>15 November 2026</strong>. Sources: IRS, Social Security Administration, California Franchise Tax Board (FTB), Employment Development Department (EDD), New York State Department of Taxation and Finance, New Mexico Taxation and Revenue Department, Washington Employment Security Department.</p>
+  <table>
+    <thead><tr><th>Figure</th><th>2026 value</th><th>Source</th></tr></thead>
+    <tbody>
+      <tr><td>Federal income tax rates</td><td>10%, 12%, 22%, 24%, 32%, 35%, 37%</td><td>IRS Rev. Proc. 2025-32</td></tr>
+      <tr><td>Federal standard deduction</td><td>$16,100 single / $32,200 married filing jointly</td><td>IRS Rev. Proc. 2025-32</td></tr>
+      <tr><td>Social Security tax</td><td>6.2% of wages up to $184,500 wage base</td><td>IRS Topic 751; SSA</td></tr>
+      <tr><td>Medicare tax</td><td>1.45% of all wages + 0.9% over $200,000 single / $250,000 joint</td><td>IRS Topic 751</td></tr>
+      <tr><td>401(k) elective deferral limit</td><td>$24,500</td><td>IRS Notice 2025-67</td></tr>
+      <tr><td>California income tax</td><td>1%–12.3% (9 brackets) + 1% over $1,000,000; standard deduction $5,900 single / $11,800 joint</td><td>FTB 2026 rate schedules (Oct 2026 Tax News)</td></tr>
+      <tr><td>California SDI</td><td>1.3% of all wages, no cap</td><td>EDD</td></tr>
+      <tr><td>Texas income tax</td><td>None</td><td>Texas Comptroller</td></tr>
+      <tr><td>Washington PFML / WA Cares</td><td>PFML 1.13% of wages up to $184,500 (employee share 71.43%); WA Cares 0.58% of all wages</td><td>WA Employment Security Dept.</td></tr>
+      <tr><td>New York State income tax</td><td>3.9%–10.9% (9 brackets); standard deduction $8,000 single / $16,050 joint</td><td>NYS Dept. of Taxation and Finance</td></tr>
+      <tr><td>New York City resident tax</td><td>3.078%–3.876% (4 brackets), same taxable income as the state</td><td>NYS Dept. of Taxation and Finance</td></tr>
+      <tr><td>New Mexico income tax</td><td>1.5%–5.9% (6 brackets, HB 252); standard deduction = federal</td><td>NM Taxation and Revenue Dept.; HB 252</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="card">
+  <h2>What this calculator does NOT model</h2>
+  <ul>
+    <li><strong>State income tax for states other than CA, TX, WA, NY and NM</strong> — for those states the result is a federal + FICA estimate only, and the page says so.</li>
+    <li><strong>City and local income taxes</strong>, except New York City (toggle above). This includes Philadelphia, most Ohio and Kentucky cities, and Yonkers (16.75% surcharge on NY State tax).</li>
+    <li><strong>Tax credits</strong> — child tax credit, earned income tax credit, education credits, and the NYC school tax credit are not included.</li>
+    <li><strong>New York benefit recapture</strong> above $107,650 of income, and the NY Paid Family Leave premium — both are real costs for some New Yorkers and are not in the model yet.</li>
+    <li><strong>Itemised deductions, multiple jobs, mid-year pay changes, bonuses</strong> (bonuses are withheld federally at a flat 22% supplemental rate), tips, overtime premiums, garnishments, and self-employment tax (SECA 15.3%).</li>
+    <li><strong>California HSA treatment</strong> — California does not recognise HSA contributions, so HSA money entered as an "other pre-tax deduction" lowers the federal figure but should still count as California wages. The calculator does not split this out.</li>
+    <li><strong>Withholding vs actual liability</strong> — this tool estimates annual tax liability spread across paychecks. Actual withholding follows IRS Publication 15-T tables and your W-4, and your refund or balance due at filing time settles the difference.</li>
+  </ul>
+</section>
+
+<section class="card">
+  <h2>State paycheck calculators — coming soon</h2>
+  <p>Separate pages with each state's own brackets, worked examples and FAQs are on the way: <strong>California Paycheck Calculator</strong>, <strong>Texas Paycheck Calculator</strong>, <strong>Washington Paycheck Calculator</strong>, <strong>New York Paycheck Calculator</strong> and <strong>New Mexico Paycheck Calculator</strong> first, then the remaining states.</p>
+</section>
+
+<section class="card">
+  <h2>Disclaimer</h2>
+  <p><strong>Estimates only — not tax advice.</strong> This calculator gives an estimate based on 2026 federal and state figures and the standard deduction. Your actual take-home pay depends on your W-4, your employer's payroll setup, benefits, credits and deductions this tool does not model. For your exact withholding, use the <a href="https://www.irs.gov/individuals/tax-withholding-estimator" rel="noopener">IRS Tax Withholding Estimator</a> or speak to a qualified tax professional.</p>
+</section>
+
+</main>
+<footer>
+  Paycheck Calculator — free 2026 take-home pay calculator. Figures last checked 15 November 2026. No data is collected or sent anywhere.
+</footer>
+<script>
+/* Paycheck Calculator engine — 2026 figures.
+   All figures from IRS Rev. Proc. 2025-32, IRS Topic 751 / SSA,
+   CA FTB 2026 rate schedules (Oct 2026 Tax News), EDD, NYS Dept. of
+   Taxation and Finance, NM Taxation and Revenue Dept. (HB 252),
+   WA Employment Security Dept. Last checked 15 Nov 2026.
+   Pure functions below the data tables run under Node for testing. */
+"use strict";
+
+var FED_BRACKETS = {
+  single: [[12400,0.10],[50400,0.12],[105700,0.22],[201775,0.24],[256225,0.32],[640600,0.35],[Infinity,0.37]],
+  mfj:    [[24800,0.10],[100800,0.12],[211400,0.22],[403550,0.24],[512450,0.32],[768700,0.35],[Infinity,0.37]]
+};
+var FED_STD_DED = { single: 16100, mfj: 32200 };
+var SS_RATE = 0.062, SS_WAGE_BASE = 184500;
+var MED_RATE = 0.0145, ADDL_MED_RATE = 0.009;
+var ADDL_MED_THRESHOLD = { single: 200000, mfj: 250000 };
+var K401_LIMIT = 24500;
+
+var STATE = {
+  CA: {
+    name: "California",
+    stdDed: { single: 5900, mfj: 11800 },
+    brackets: {
+      single: [[11456,0.01],[27157,0.02],[42861,0.04],[59498,0.06],[75197,0.08],[384109,0.093],[460927,0.103],[768213,0.113],[Infinity,0.123]],
+      mfj:    [[22912,0.01],[54314,0.02],[85722,0.04],[118996,0.06],[150394,0.08],[768218,0.093],[921854,0.103],[1536426,0.113],[Infinity,0.123]]
+    },
+    surchargeThreshold: 1000000, surchargeRate: 0.01, /* 1% on taxable income over $1M */
+    sdiRate: 0.013 /* CA SDI, all wages, no cap */
+  },
+  TX: { name: "Texas", noTax: true },
+  WA: {
+    name: "Washington", noTax: true,
+    pfmlRate: 0.0113, pfmlCap: 184500, pfmlEmployeeShare: 0.7143,
+    waCaresRate: 0.0058
+  },
+  NY: {
+    name: "New York",
+    stdDed: { single: 8000, mfj: 16050 },
+    brackets: {
+      single: [[8500,0.039],[11700,0.044],[13900,0.0515],[80650,0.054],[215400,0.059],[1077550,0.0685],[5000000,0.0965],[25000000,0.103],[Infinity,0.109]],
+      mfj:    [[17150,0.039],[23400,0.044],[27800,0.0515],[161300,0.054],[430800,0.059],[2155350,0.0685],[5000000,0.0965],[25000000,0.103],[Infinity,0.109]]
+    },
+    nyc: {
+      single: [[12000,0.03078],[25000,0.03762],[50000,0.03819],[Infinity,0.03876]],
+      mfj:    [[21600,0.03078],[45000,0.03762],[90000,0.03819],[Infinity,0.03876]]
+    }
+  },
+  NM: {
+    name: "New Mexico",
+    stdDed: { single: 16100, mfj: 32200 }, /* = federal standard deduction */
+    brackets: {
+      single: [[5500,0.015],[16500,0.032],[33500,0.043],[66500,0.047],[210000,0.049],[Infinity,0.059]],
+      mfj:    [[8000,0.015],[25000,0.032],[50000,0.043],[100000,0.047],[315000,0.049],[Infinity,0.059]]
+    }
+  }
+};
+var STATE_NAMES = {AL:"Alabama",AK:"Alaska",AZ:"Arizona",AR:"Arkansas",CO:"Colorado",CT:"Connecticut",DE:"Delaware",DC:"District of Columbia",FL:"Florida",GA:"Georgia",HI:"Hawaii",ID:"Idaho",IL:"Illinois",IN:"Indiana",IA:"Iowa",KS:"Kansas",KY:"Kentucky",LA:"Louisiana",ME:"Maine",MD:"Maryland",MA:"Massachusetts",MI:"Michigan",MN:"Minnesota",MS:"Mississippi",MO:"Missouri",MT:"Montana",NE:"Nebraska",NV:"Nevada",NH:"New Hampshire",NJ:"New Jersey",NC:"North Carolina",ND:"North Dakota",OH:"Ohio",OK:"Oklahoma",OR:"Oregon",PA:"Pennsylvania",RI:"Rhode Island",SC:"South Carolina",SD:"South Dakota",TN:"Tennessee",UT:"Utah",VT:"Vermont",VA:"Virginia",WV:"West Virginia",WI:"Wisconsin",WY:"Wyoming"};
+
+function bracketTax(taxable, brackets){
+  if (taxable <= 0) return 0;
+  var tax = 0, prev = 0;
+  for (var i = 0; i < brackets.length; i++){
+    var top = brackets[i][0], rate = brackets[i][1];
+    if (taxable <= prev) break;
+    tax += (Math.min(taxable, top) - prev) * rate;
+    prev = top;
+  }
+  return tax;
+}
+
+function computePaycheck(o){
+  /* o: {gross, periods, filing, state, nyc, k401Pct, otherPretax} */
+  var gross = Math.max(0, +o.gross || 0);
+  var periods = +o.periods || 26;
+  var filing = o.filing === "mfj" ? "mfj" : "single";
+  var k401 = Math.min(gross * ((+o.k401Pct || 0) / 100), K401_LIMIT, gross);
+  var other = Math.min(Math.max(0, +o.otherPretax || 0), Math.max(0, gross - k401));
+  var pretax = k401 + other;
+
+  /* Federal: 401(k) + other pre-tax reduce taxable income, NOT FICA wages */
+  var fedTaxable = Math.max(0, gross - pretax - FED_STD_DED[filing]);
+  var federal = bracketTax(fedTaxable, FED_BRACKETS[filing]);
+
+  /* FICA on full gross wages */
+  var ss = SS_RATE * Math.min(gross, SS_WAGE_BASE);
+  var medicare = MED_RATE * gross + ADDL_MED_RATE * Math.max(0, gross - ADDL_MED_THRESHOLD[filing]);
+
+  /* State */
+  var st = STATE[o.state];
+  var stateTax = 0, sdi = 0, pfml = 0, waCares = 0, nycTax = 0;
+  var stateModeled = !!st;
+  if (st && !st.noTax){
+    var stTaxable = Math.max(0, gross - pretax - st.stdDed[filing]);
+    stateTax = bracketTax(stTaxable, st.brackets[filing]);
+    if (st.surchargeThreshold) stateTax += st.surchargeRate * Math.max(0, stTaxable - st.surchargeThreshold);
+    if (o.state === "NY" && o.nyc) nycTax = bracketTax(stTaxable, st.nyc[filing]);
+  }
+  if (st && st.sdiRate) sdi = st.sdiRate * gross;
+  if (st && st.pfmlRate){
+    pfml = st.pfmlRate * Math.min(gross, st.pfmlCap) * st.pfmlEmployeeShare;
+    waCares = st.waCaresRate * gross;
+  }
+  var stateTotal = stateTax + sdi + pfml + waCares + nycTax;
+  var totalTax = federal + ss + medicare + stateTotal;
+  var net = gross - totalTax - pretax;
+  var per = function(v){ return v / periods; };
+  return {
+    gross: gross, periods: periods, filing: filing,
+    k401: k401, otherPretax: other, pretax: pretax,
+    fedTaxable: fedTaxable, federal: federal,
+    ss: ss, medicare: medicare,
+    stateTax: stateTax, sdi: sdi, pfml: pfml, waCares: waCares, nycTax: nycTax,
+    stateTotal: stateTotal, totalTax: totalTax, net: net,
+    grossPerPay: per(gross), federalPerPay: per(federal),
+    ssPerPay: per(ss), medicarePerPay: per(medicare),
+    statePerPay: per(stateTotal), k401PerPay: per(k401), otherPerPay: per(other),
+    netPerPay: per(net),
+    effectiveRate: gross > 0 ? totalTax / gross : 0,
+    stateModeled: stateModeled,
+    stateName: st ? st.name : (STATE_NAMES[o.state] || o.state)
+  };
+}
+
+var fmt = function(n){ return "$" + n.toLocaleString("en-US",{minimumFractionDigits:2, maximumFractionDigits:2}); };
+var fmt0 = function(n){ return "$" + Math.round(n).toLocaleString("en-US"); };
+
+if (typeof document !== "undefined"){
+  var $ = function(id){ return document.getElementById(id); };
+  var payType = $("pay-type"), grossInput = $("gross-input"), grossLabel = $("gross-label"),
+      grossHint = $("gross-hint"), hoursRow = $("hours-row"), hoursInput = $("hours"),
+      stateSel = $("state"), nycRow = $("nyc-row");
+
+  function syncPayType(){
+    if (payType.value === "hourly"){
+      grossLabel.textContent = "Hourly rate ($ per hour)";
+      grossHint.textContent = "Your pay per hour, before any tax or deduction.";
+      hoursRow.style.display = "";
+    } else {
+      grossLabel.textContent = "Gross annual salary ($)";
+      grossHint.textContent = "Your pay before any tax or deduction.";
+      hoursRow.style.display = "none";
+    }
+  }
+  function syncState(){
+    nycRow.style.display = stateSel.value === "NY" ? "" : "none";
+  }
+  payType.addEventListener("change", syncPayType);
+  stateSel.addEventListener("change", syncState);
+  syncPayType(); syncState();
+
+  $("calc-form").addEventListener("submit", function(e){
+    e.preventDefault();
+    var raw = parseFloat(grossInput.value) || 0;
+    var gross = raw;
+    if (payType.value === "hourly") gross = raw * (parseFloat(hoursInput.value) || 40) * 52;
+    var nyc = false;
+    var nycChecked = document.querySelector('input[name="nyc"]:checked');
+    if (nycChecked) nyc = nycChecked.value === "yes";
+    var r = computePaycheck({
+      gross: gross,
+      periods: parseInt($("frequency").value, 10),
+      filing: $("filing").value,
+      state: stateSel.value,
+      nyc: nyc,
+      k401Pct: parseFloat($("k401").value) || 0,
+      otherPretax: parseFloat($("other-pretax").value) || 0
+    });
+    $("results").style.display = "";
+    $("net-per-pay").textContent = fmt(r.netPerPay);
+    $("net-per-year").textContent = fmt0(r.net) + " take-home";
+    $("eff-rate").textContent = (r.effectiveRate * 100).toFixed(1) + "%";
+    var rows = [
+      ["Gross pay", r.grossPerPay, r.gross],
+      ["Federal income tax", -r.federalPerPay, -r.federal],
+      ["Social Security (6.2%)", -r.ssPerPay, -r.ss],
+      ["Medicare (1.45%)", -r.medicarePerPay, -r.medicare]
+    ];
+    if (r.stateModeled){
+      if (r.stateTax) rows.push(["State income tax (" + r.stateName + ")", -r.stateTax / r.periods, -r.stateTax]);
+      if (r.sdi) rows.push(["California SDI (1.3%)", -r.sdi / r.periods, -r.sdi]);
+      if (r.pfml) rows.push(["WA Paid Family & Medical Leave", -r.pfml / r.periods, -r.pfml]);
+      if (r.waCares) rows.push(["WA Cares Fund (0.58%)", -r.waCares / r.periods, -r.waCares]);
+      if (r.nycTax) rows.push(["New York City income tax", -r.nycTax / r.periods, -r.nycTax]);
+      if (!r.stateTax && !r.sdi && !r.pfml && !r.waCares && !r.nycTax)
+        rows.push(["State income tax (" + r.stateName + ")", 0, 0]);
+    }
+    if (r.k401) rows.push(["401(k) contribution", -r.k401PerPay, -r.k401]);
+    if (r.otherPretax) rows.push(["Other pre-tax deductions", -r.otherPerPay, -r.otherPretax]);
+    rows.push(["Take-home pay", r.netPerPay, r.net]);
+    var tb = document.querySelector("#breakdown tbody");
+    tb.innerHTML = "";
+    rows.forEach(function(row, i){
+      var tr = document.createElement("tr");
+      if (i === rows.length - 1) tr.className = "net";
+      var c0 = document.createElement("td"); c0.textContent = row[0];
+      var c1 = document.createElement("td"); c1.textContent = (row[1] < 0 ? "−" : "") + fmt(Math.abs(row[1]));
+      var c2 = document.createElement("td"); c2.textContent = (row[2] < 0 ? "−" : "") + fmt(Math.abs(row[2]));
+      tr.appendChild(c0); tr.appendChild(c1); tr.appendChild(c2);
+      tb.appendChild(tr);
+    });
+    var note = $("state-note");
+    if (!r.stateModeled){
+      note.innerHTML = '<div class="note"><strong>' + r.stateName + ' state tax is not modelled yet.</strong> This is a federal + FICA estimate only. State income tax for ' + r.stateName + ' will be added with its own state page — the five modelled states are California, Texas, Washington, New York and New Mexico.</div>';
+    } else if (r.stateName === "Texas" || r.stateName === "Washington"){
+      note.innerHTML = '<div class="note">' + r.stateName + ' levies no state income tax on wages.' + (r.stateName === "Washington" ? ' Washington still takes PFML and WA Cares Fund deductions — both are included above.' : '') + '</div>';
+    } else {
+      note.innerHTML = "";
+    }
+    document.getElementById("results").scrollIntoView({behavior:"smooth", block:"start"});
+  });
+}
+if (typeof module !== "undefined") module.exports = { computePaycheck: computePaycheck, bracketTax: bracketTax };
+</script>
+</body>
+</html>
